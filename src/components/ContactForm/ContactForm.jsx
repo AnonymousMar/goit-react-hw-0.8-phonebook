@@ -13,7 +13,7 @@ const ContactForm = () => {
     const [number, setNumber] = useState('');
 
     const handleSubmit = event => {
-        //event.preventDefault();
+        event.preventDefault();
 
         const contact = {
             name: name,
@@ -49,7 +49,7 @@ const ContactForm = () => {
 
         dispatch(addContact(contact));
         setName('');
-        setNumber('');
+       setNumber('');
     };
 
     const handleNameChange = event => {
