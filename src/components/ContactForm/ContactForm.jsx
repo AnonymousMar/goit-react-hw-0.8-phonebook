@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addContact } from 'redux/operations';
-import Notiflix from 'notiflix';
-import { selectContacts } from 'redux/selectors';
+
 import { ReactComponent as AddIcon } from '../icons/plus-user.svg';
 import { Form, Input, Text, Button } from './ContactForm.styled';
 
 const ContactForm = () => {
     const dispatch = useDispatch();
-    const contacts = useSelector(selectContacts);
+    
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
 
@@ -20,32 +19,7 @@ const ContactForm = () => {
             number: number,
         };
 
-        const isContactExist = contacts.find(
-            ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
-        );
 
-        if (isContactExist) {
-            Notiflix.Report.warning(
-                'Alert',
-                `Contact with name ${contact.name} already exists!`,
-                'Ok'
-            );
-            return;
-        }
-
-        const isNumberExist = contacts.find(
-            ({ number }) =>
-                contact.number.replace(/\D/g, '') === number.replace(/\D/g, '')
-        );
-
-        if (isNumberExist) {
-            Notiflix.Report.warning(
-                'Alert',
-                `Number ${contact.number} is already in contacts!`,
-                'Ok'
-            );
-            return;
-        }
 
         dispatch(addContact(contact));
         setName('');

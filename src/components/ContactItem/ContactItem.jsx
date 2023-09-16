@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import Notiflix from 'notiflix';
+import { selectContacts } from 'redux/selectors';
 import { deleteContact, editContatc } from 'redux/operations';
 import { Modal, Input, Button, message, Popconfirm } from 'antd';
 import { ReactComponent as AddIcon } from '../icons/minus-user.svg';
@@ -18,6 +20,7 @@ function ContactItem({ contact }) {
     const [showModal, setShowModal] = useState(false);
     const [newName, setNewName] = useState(contact.name);
     const [newNumber, setNewNumber] = useState(contact.number);
+    const contacts = useSelector(selectContacts);
 
     const confirm = e => {
         handleDelete(e.target.value);
@@ -37,6 +40,32 @@ function ContactItem({ contact }) {
     };
 
     const handleSave = () => {
+        const isContactExist = contacts.find(
+            ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
+        );
+
+        if (isContactExist) {
+            Notiflix.Report.warning(
+                'Alert',
+                `Contact with name ${contact.name} already exists!`,
+                'Ok'
+            );
+            return;
+        }
+
+        const isNumberExist = contacts.find(
+            ({ number }) =>
+                contact.number.replace(/\D/g, '') === number.replace(/\D/g, '')
+        );
+
+        if (isNumberExist) {
+            Notiflix.Report.warning(
+                'Alert',
+                `Number ${contact.number} is already in contacts!`,
+                'Ok'
+            );
+            return;
+        }
         setShowModal(false);
         dispatch(editContatc({ id: contact.id, name: newName, number: newNumber }));
     };
