@@ -30,7 +30,8 @@ export const logIn = createAsyncThunk('auth/login', async (credentials, { reject
         setAuthHeader.set(data.token);
         return data;
     } catch (error) {
-        rejectWithValue(alert('Email or password is not correct'))
+        alert('Email or password is not correct')
+        //rejectWithValue(alert('Email or password is not correct'))
     }
 });
 //export const logIn = createAsyncThunk(
